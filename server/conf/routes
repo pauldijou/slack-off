@@ -1,0 +1,14 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /debug                      controllers.Debug.display
+
+->      /command                    io.slackoff.core.controllers.CommandController
+->      /outgoing                   io.slackoff.core.controllers.OutgoingController
+->      /jira                       io.slackoff.jira.JiraController
+->      /bitbucket                  io.slackoff.bitbucket.controllers.BitbucketController
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
