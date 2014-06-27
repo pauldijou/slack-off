@@ -18,6 +18,7 @@ object JiraController
 
   def applyRoute[RH <: RequestHeader, H >: Handler](rh: RH, default: RH ⇒ H) =
     (rh.method, rh.path.drop(path.length)) match {
+      case ("GET", "")  ⇒ Action { Ok("JIRA plugin is currently running...") }
       case ("POST", "") ⇒ handleWebhook
       case _            ⇒ default(rh)
     }
