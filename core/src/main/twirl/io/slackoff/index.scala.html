@@ -1,0 +1,25 @@
+@(modules: Seq[io.slackoff.core.models.Module], modulePrefix: String)
+
+@io.slackoff.html.main {
+
+<p>You have currently @{modules.size} module@if(modules.size > 1) { s } running.</p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Controller?</th>
+      <th>Actor?</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for(module <- modules) {
+      <tr>
+        <td><a href="@{modulePrefix + module.name}">@module.name</a></td>
+        <td>@module.controller.map{ _ => true }.getOrElse(false).toString</td>
+        <td>@module.actor.map{ _ => true }.getOrElse(false).toString</td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+}

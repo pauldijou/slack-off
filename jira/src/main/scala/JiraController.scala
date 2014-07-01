@@ -12,7 +12,7 @@ object JiraController
     extends io.slackoff.core.controllers.ModuleController
     with JiraConfig {
 
-  lazy val logger = Logger("hooks.jira")
+  lazy val logger = Logger("modules.jira.controller")
 
   def hasRoute(rh: RequestHeader) = true
 
@@ -135,4 +135,3 @@ object JiraController
     Ok
   }
 }
-

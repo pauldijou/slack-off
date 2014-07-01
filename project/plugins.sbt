@@ -7,3 +7,5 @@ resolvers += "Sonatype OSS Releases"  at "https://oss.sonatype.org/content/repos
 resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
 
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.3.1")
+
+addSbtPlugin("com.typesafe.sbt" % "sbt-twirl" % "1.0.2")

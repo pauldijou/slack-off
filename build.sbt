@@ -16,6 +16,7 @@ lazy val core = Project("core", file("core"))
     name := "slackoff-core",
     libraryDependencies ++= Seq(akka, jsonP, playP, wsP)
   )
+  .enablePlugins(SbtTwirl)
 
 lazy val jira = Project("jira", file("jira"))
   .settings(commonSettings: _*)
@@ -40,6 +41,7 @@ lazy val server = Project("server", file("server"))
     libraryDependencies ++= Seq(joda, json, play, ws)
   )
   .enablePlugins(PlayScala)
+  .enablePlugins(SbtTwirl)
   .dependsOn(jira, bitbucket)
 
 lazy val slackOff = project.in(file("."))

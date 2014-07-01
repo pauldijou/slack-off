@@ -8,13 +8,14 @@ import play.api.libs.functional.syntax._
 import play.api.data.Form
 import play.api.data.Forms._
 
+import io.slackoff.core.Api
 import io.slackoff.core.models._
 
 object OutgoingController
     extends io.slackoff.core.controllers.ModuleController
     with io.slackoff.core.utils.Config {
 
-  lazy val logger = Logger("hooks.messages")
+  lazy val logger = Logger("core.controllers.outgoing")
 
   def hasRoute(rh: RequestHeader) = true
 
@@ -56,7 +57,7 @@ object OutgoingController
         debugEnd
         if (!hook.acceptable) { Ok }
         else {
-          io.slackoff.core.actors.Master.outer ! hook
+          Api !! hook
           Ok
         }
       }
