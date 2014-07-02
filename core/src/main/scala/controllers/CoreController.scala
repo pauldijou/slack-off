@@ -13,20 +13,18 @@ import play.api.data.Forms._
 
 import io.slackoff.core.Api
 import io.slackoff.core.models._
+import  io.slackoff.core.utils._
 
-object CoreController
-    extends io.slackoff.core.controllers.ModuleController
-    with io.slackoff.core.utils.Answer
-    with io.slackoff.core.utils.Config {
+object CoreController extends ModuleController with Answer with Config {
 
-  lazy val logger = Logger("core.controllers.core")
+  lazy val logger = Logger("slackoff.modules.core.controllers.core")
 
   def hasRoute(rh: RequestHeader) = true
 
   def applyRoute[RH <: RequestHeader, H >: Handler](rh: RH, default: RH ⇒ H) =
     (rh.method, rh.path.drop(path.length)) match {
-      case ("POST", "/outgoings") ⇒ handleOutgoings
-      case ("POST", "/commands")  ⇒ handleCommands
+      case ("POST", "/outgoings") ⇒ handleOutgoing
+      case ("POST", "/commands")  ⇒ handleCommand
       case _                      ⇒ default(rh)
     }
 
@@ -47,8 +45,8 @@ object CoreController
     )(OutgoingWebHook.apply)(OutgoingWebHook.unapply)
   )
 
-  def handleOutgoings = Action { implicit request ⇒
-    debugStart("OutgoingWebHooks.handle")
+  def handleOutgoing = Action { implicit request ⇒
+    debugStart("core.controllers.core.handleOutgoing")
     hookForm.bindFromRequest.fold(
       errors ⇒ {
         debug("ERROR parsing: " + request.body)
@@ -59,11 +57,11 @@ object CoreController
       },
       hook ⇒ {
         debug(hook.toString)
-        println(hook.toString)
         debugEnd
         if (!hook.acceptable) { Ok }
         else {
           Api !! hook
+          hook.command.map(broadcastCommand)
           Ok
         }
       }
@@ -96,14 +94,13 @@ object CoreController
         }
       }
     }
-    // case "/jira" => handleJira(command)
     case _ ⇒ {
       Api !! command
       asyncOk
-    } //asyncError("unknow command '" + command.command + "'.")
+    }
   }
 
-  def handleCommands = Action.async { implicit request ⇒
+  def handleCommand = Action.async { implicit request ⇒
     commandForm.bindFromRequest.fold(
       errors ⇒ asyncError("wrong command submission from Slack."),
       command ⇒ {

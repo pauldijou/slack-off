@@ -30,7 +30,8 @@ case class IncomingWebHook(
     icon_url: Option[String] = None,
     icon_emoji: Option[String] = None,
     attachments: Option[List[IncomingWebHookAttachment]] = None) {
-  def send = Api.send(this)
+  def send(team: Team) = Api.send(this, team, None)
+  def send(team: Team, token: String) = Api.send(this, team, Option(token))
 }
 
 object IncomingWebHook {

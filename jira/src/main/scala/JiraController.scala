@@ -5,6 +5,7 @@ import play.api.mvc._
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 
+import io.slackoff.core.Api
 import io.slackoff.core.models._
 import io.slackoff.jira.JiraWebhookAction._
 
@@ -12,7 +13,7 @@ object JiraController
     extends io.slackoff.core.controllers.ModuleController
     with JiraConfig {
 
-  lazy val logger = Logger("modules.jira.controller")
+  lazy val logger = Logger("slackoff.modules.jira.controller")
 
   def hasRoute(rh: RequestHeader) = true
 
@@ -33,6 +34,7 @@ object JiraController
       event ⇒ {
         debug(Json.prettyPrint(Json.toJson(event)))
         val action = event.webhookEvent
+        val team = request.getQueryString("team") map { Api.teams.from(_) } getOrElse Api.teams.default
         val username = request.getQueryString("username") orElse jira.bot.name
         val channel = request.getQueryString("channel").map("#" + _)
         val iconUrl = request.getQueryString("iconUrl") orElse jira.bot.icon
@@ -128,7 +130,7 @@ object JiraController
         val attachments = attachmentsBuffer.result
         val attachmentsOpt = if (attachments.isEmpty) { None } else { Some(attachments) }
 
-        IncomingWebHook(message, username, channel, iconUrl, None, attachmentsOpt).send
+        IncomingWebHook(message, username, channel, iconUrl, None, attachmentsOpt).send(team)
       }
     )
 

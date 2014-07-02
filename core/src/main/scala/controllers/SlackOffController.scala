@@ -6,12 +6,11 @@ import play.api.mvc._
 
 import io.slackoff.core.Api
 import io.slackoff.core.controllers._
+import  io.slackoff.core.utils._
 
-object SlackOffController
-    extends io.slackoff.core.controllers.ModuleController
-    with io.slackoff.core.utils.Config {
+object SlackOffController extends ModuleController with Answer with Config {
 
-  lazy val logger = Logger("core.controllers.slackoff")
+  lazy val logger = Logger("slackoff.controllers.slackoff")
 
   def hasRoute(rh: RequestHeader) = true
 

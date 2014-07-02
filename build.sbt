@@ -1,4 +1,6 @@
 import Dependencies._
+import com.typesafe.sbt.SbtNativePackager._
+import NativePackagerKeys._
 
 val wsP = ws % "provided"
 
@@ -14,7 +16,7 @@ lazy val core = Project("core", file("core"))
   .settings(commonSettings: _*)
   .settings(
     name := "slackoff-core",
-    libraryDependencies ++= Seq(akka, jsonP, playP, wsP)
+    libraryDependencies ++= Seq(akka, jsonP, playP, wsP, scalaTestPlus)
   )
   .enablePlugins(SbtTwirl)
 

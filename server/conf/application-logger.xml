@@ -10,10 +10,7 @@
 
   <logger name="play" level="INFO" />
   <logger name="application" level="DEBUG" />
-  <logger name="hooks.incoming" level="DEBUG" />
-  <logger name="hooks.outgoing" level="DEBUG" />
-  <logger name="hooks.bitbucket" level="DEBUG" />
-  <logger name="hooks.jira" level="DEBUG" />
+  <logger name="slackoff" level="DEBUG" />
 
   <root level="ERROR">
     <appender-ref ref="STDOUT" />

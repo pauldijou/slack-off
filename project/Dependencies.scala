@@ -11,4 +11,5 @@ object Dependencies {
   val play = "com.typesafe.play" %% "play" % playVersion
   val jsonP = "com.typesafe.play" %% "play-json" % playVersion % "provided"
   val playP = "com.typesafe.play" %% "play" % playVersion % "provided"
+  val scalaTestPlus = "org.scalatestplus" %% "play" % "1.1.0" % "test"
 }

@@ -21,7 +21,6 @@ class Jiractor extends Actor with io.slackoff.core.utils.Answer with JiraConfig 
         JiraServices.create(command.args(2), command.args(3), command.channel_name.toUpperCase, command.args(1)).map { r ⇒
           if (r.keys.contains("key")) {
             val key = (r \ "key").toString
-            println("Added jira " + key)
             val link = JiraServices.issueUrl(key)
             ok(s"<@${command.user_name}> juste created JIRA <${link}|${key}>")
           } else {
