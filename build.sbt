@@ -20,6 +20,14 @@ lazy val core = Project("core", file("core"))
   )
   .enablePlugins(SbtTwirl)
 
+lazy val bitbucket = Project("bitbucket", file("bitbucket"))
+  .settings(commonSettings: _*)
+  .settings(
+    name := "slackoff-bitbucket",
+    libraryDependencies ++= Seq(jsonP, playP, wsP)
+  )
+  .dependsOn(core)
+
 lazy val jira = Project("jira", file("jira"))
   .settings(commonSettings: _*)
   .settings(
@@ -28,10 +36,18 @@ lazy val jira = Project("jira", file("jira"))
   )
   .dependsOn(core)
 
-lazy val bitbucket = Project("bitbucket", file("bitbucket"))
+lazy val kudo = Project("kudo", file("kudo"))
   .settings(commonSettings: _*)
   .settings(
-    name := "slackoff-bitbucket",
+    name := "slackoff-kudo",
+    libraryDependencies ++= Seq(jsonP, playP, wsP)
+  )
+  .dependsOn(core)
+
+lazy val zik = Project("zik", file("zik"))
+  .settings(commonSettings: _*)
+  .settings(
+    name := "slackoff-zik",
     libraryDependencies ++= Seq(jsonP, playP, wsP)
   )
   .dependsOn(core)
@@ -44,11 +60,11 @@ lazy val server = Project("server", file("server"))
   )
   .enablePlugins(PlayScala)
   .enablePlugins(SbtTwirl)
-  .dependsOn(jira, bitbucket)
+  .dependsOn(bitbucket, jira, kudo, zik)
 
 lazy val slackOff = project.in(file("."))
   .settings(commonSettings: _*)
   .settings(
     name := "slackoff"
   )
-  .aggregate(core, jira, bitbucket, server)
+  .aggregate(core, bitbucket, jira, kudo, zik, server)

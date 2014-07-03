@@ -6,6 +6,7 @@ trait ZikConfig extends io.slackoff.core.utils.Config {
   object zik {
     object soundcloud {
       def enabled = config.getBoolean(configPrefix + "soundcloud.enabled") getOrElse false
+      def clientId = config.getString(configPrefix + "soundcloud.clientId") getOrElse ""
     }
 
     object spotify {
