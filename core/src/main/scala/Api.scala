@@ -3,10 +3,11 @@ package io.slackoff.core
 import scala.collection.mutable.Buffer
 import scala.concurrent.duration._
 
-import akka.actor.{ ActorSystem, Props }
+import akka.actor.Props
 import akka.pattern.ask
 import akka.util.Timeout
 
+import play.api.libs.concurrent.Akka
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.libs.ws.WS
@@ -19,7 +20,6 @@ import io.slackoff.core.controllers.ModuleController
 object Api extends Log with Config {
   lazy val logger = initLogger("slackoff.core.Api")
 
-  private val system = ActorSystem("slackoff")
   private var modules: Buffer[Module] = Buffer.empty
 
   implicit val timeout = Timeout(5 seconds)
@@ -35,7 +35,7 @@ object Api extends Log with Config {
       description,
       controller,
       actorProps,
-      actorProps map { system.actorOf(_, name) }
+      actorProps map { Akka.system.actorOf(_, name) }
     )
 
     modules += newModule
