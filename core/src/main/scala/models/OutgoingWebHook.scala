@@ -24,7 +24,7 @@ case class OutgoingWebHook(
   lazy val team: Team = Api.teams.from(this.team_id, Option(this.team_domain))
   lazy val command: Option[Command] = this.trigger_word.flatMap { _ match {
     case "!" => {
-      val words = content.split(" ")
+      val words = content.split(" ").drop(1) // Here, we are dropping the trigger word from the text
       Option(Command(token, team_id, channel_id, channel_name, user_id, user_name, "/" + words.head, words.drop(1).mkString(" ")))
     }
     case _ => None
