@@ -7,13 +7,17 @@ import akka.actor.Actor
 
 import io.slackoff.core.models.{ Command, OutgoingWebHook, IncomingWebHook }
 
-class Zaktor extends Actor with ZikConfig {
+class Zaktor extends Actor with ZikConfig with io.slackoff.core.utils.Log {
+
+  lazy val logger = initLogger("slackoff.modules.zik.zaktor")
+
   def receive = {
     case c: Command         ⇒ handleCommand(c)
     case _                  ⇒ ()
   }
 
   def handleCommand(command: Command) = {
+    debug(s"Handling command ${command}...")
     val channel = Option(command.channel_id)
     command.command match {
       case "/np" ⇒ {

@@ -10,7 +10,7 @@ import  io.slackoff.core.utils._
 
 object SlackOffController extends ModuleController with Answer with Config {
 
-  lazy val logger = Logger("slackoff.controllers.slackoff")
+  lazy val logger = initLogger("slackoff.controllers.slackoff")
 
   def hasRoute(rh: RequestHeader) = true
 

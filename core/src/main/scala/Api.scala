@@ -17,7 +17,7 @@ import io.slackoff.core.utils._
 import io.slackoff.core.controllers.ModuleController
 
 object Api extends Log with Config {
-  lazy val logger = play.api.Logger("slackoff.core.Api")
+  lazy val logger = initLogger("slackoff.core.Api")
 
   private val system = ActorSystem("slackoff")
   private var modules: Buffer[Module] = Buffer.empty

@@ -17,7 +17,7 @@ import  io.slackoff.core.utils._
 
 object CoreController extends ModuleController with Answer with Config {
 
-  lazy val logger = Logger("slackoff.modules.core.controllers.core")
+  lazy val logger = initLogger("slackoff.modules.core.controllers.core")
 
   def hasRoute(rh: RequestHeader) = true
 
@@ -95,6 +95,7 @@ object CoreController extends ModuleController with Answer with Config {
       }
     }
     case _ ⇒ {
+      debug(s"Broadcasting command ${command}...")
       Api !! command
       asyncOk
     }
@@ -102,7 +103,7 @@ object CoreController extends ModuleController with Answer with Config {
 
   def handleCommand = Action.async { implicit request ⇒
     commandForm.bindFromRequest.fold(
-      errors ⇒ asyncError("wrong command submission from Slack."),
+      errors ⇒ asyncError("Wrong command submission from Slack."),
       command ⇒ {
         if (command.token != token) asyncError("wrong token.")
         else broadcastCommand(command)

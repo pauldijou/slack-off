@@ -14,7 +14,7 @@ object BitbucketController
   extends io.slackoff.core.controllers.ModuleController
   with io.slackoff.bitbucket.utils.BitbucketConfig {
 
-  lazy val logger = Logger("slackoff.modules.bitbucket.controller")
+  lazy val logger = initLogger("slackoff.modules.bitbucket.controller")
 
   def hasRoute(rh: RequestHeader) = true
 

@@ -1,10 +1,13 @@
 package io.slackoff.core
 package utils
 
+import play.api.Logger
 import play.api.libs.json._
 
 trait Log {
-  def logger: play.api.Logger
+  def logger: Logger
+
+  def initLogger(name: String): Logger = Logger(name)
 
   def trace(msg: String) = logger.trace(msg)
   def trace(errors: Seq[(JsPath, Seq[play.api.data.validation.ValidationError])]) =
