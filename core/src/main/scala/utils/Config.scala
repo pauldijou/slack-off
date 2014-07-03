@@ -1,6 +1,8 @@
 package io.slackoff.core
 package utils
 
+import com.typesafe.config.ConfigFactory
+
 import scala.collection.JavaConverters._
 import play.api.Play
 import play.api.Configuration
@@ -52,12 +54,28 @@ object Config {
   def asScalaList[A](l: java.util.List[A]): List[A] = asScalaBufferConverter(l).asScala.toList
 
   lazy val config = Play.current.configuration
-  def getString(key: String): String = config.getString(key) getOrElse ""
-  def getStringSeq(key: String): Seq[String] = config.getStringList(key).map(asScalaSeq) getOrElse Seq.empty
-  def getConfigList(key: String): List[Configuration] = (config.getConfigList(key).map(asScalaList) getOrElse List.empty).toList
-  def getConfigSeq(key: String): Seq[Configuration] = config.getConfigSeq(key) getOrElse Seq.empty
 
-  lazy val teams: Seq[Team] = getConfigSeq("slackoff.teams")
+  def getString(key: String, configuration: Configuration = config): String =
+    configuration.getString(key) getOrElse ""
+
+  def getStringSeq(key: String, configuration: Configuration = config): Seq[String] =
+    configuration.getStringList(key).map(asScalaSeq) getOrElse Seq.empty
+
+  def getConfigList(key: String, configuration: Configuration = config): List[Configuration] =
+    (configuration.getConfigList(key).map(asScalaList) getOrElse List.empty).toList
+
+  def getConfigSeq(key: String, configuration: Configuration = config): Seq[Configuration] =
+    configuration.getConfigSeq(key) getOrElse Seq.empty
+
+  def getConfigSeqFromEnv(key: String): Seq[Configuration] =
+    config
+      .getString(key)
+      .map { s => ConfigFactory.parseString("teams=" + s) }
+      .map { c => Configuration(c) }
+      .map { c => getConfigSeq("teams", c) }
+      .getOrElse { Seq.empty }
+
+  lazy val teams: Seq[Team] = getConfigSeqFromEnv("slackoff.teams")
     .map { o => Team(
       o.getString("id").getOrElse(""),
       o.getString("name").getOrElse(""),
