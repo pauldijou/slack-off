@@ -59,7 +59,7 @@ object Api extends Log with Config {
     val url = s"https://${teamName}.slack.com/services/hooks/incoming-webhook?token=${incomingToken}"
     val jsonWebhook = Json.toJson(hook)
 
-    debugStart("IncomingWebhooks.send")
+    debugStart(s"IncomingWebhooks.send at ${url}")
     debug(Json.prettyPrint(jsonWebhook))
     debugEnd
 
