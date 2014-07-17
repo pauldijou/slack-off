@@ -1,4 +1,4 @@
-@(modules: Seq[io.slackoff.core.models.Module], modulePrefix: String)
+@(modules: Seq[io.slackoff.core.models.Module], teams: Seq[io.slackoff.core.models.Team], modulePrefix: String)
 
 @io.slackoff.html.main {
 
@@ -17,6 +17,24 @@
         <td><a href="@{modulePrefix + module.name}">@module.name</a></td>
         <td>@module.controller.map{ _ => true }.getOrElse(false).toString</td>
         <td>@module.actor.map{ _ => true }.getOrElse(false).toString</td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+<p>You have currently @{teams.size} team@if(teams.size > 1) { s } configured.</p>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for(team <- teams) {
+      <tr>
+        <td>@team.id</td>
+        <td>@team.name</td>
       </tr>
     }
   </tbody>

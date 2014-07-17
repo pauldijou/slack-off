@@ -20,7 +20,7 @@ object SlackOffController extends ModuleController with Answer with Config {
 
     (rh.method, paths(0), paths(1)) match {
       // Root route
-      case ("GET", None, None)  ⇒ Action { Ok(io.slackoff.html.index(Api.getModules, path + "/modules/")) }
+      case ("GET", None, None)  ⇒ Action { Ok(io.slackoff.html.index(Api.getModules, core.teams, path + "/modules/")) }
       // Registered modules routes
       case (_, Some("modules"), Some(moduleName)) ⇒ {
         Api.getModule(moduleName) match {
