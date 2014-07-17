@@ -22,6 +22,12 @@ trait Config {
     configPrefix += name + "."
   }
 
+  // CORE
+  object core {
+    def teams = Config.teams
+  }
+
+  // TODO: remove below
   // MESSAGES
   object messages {
     object jira {
@@ -29,12 +35,6 @@ trait Config {
       def regex = getString("slackoff.messages.jira.regex")
     }
   }
-
-  // CORE
-  object core {
-    def teams = Config.teams
-  }
-
   // SLACK
   object slack {
     object team {
@@ -70,12 +70,12 @@ object Config {
   def getConfigSeqFromEnv(key: String): Seq[Configuration] =
     config
       .getString(key)
-      .map { s => ConfigFactory.parseString("teams=" + s) }
+      .map { s => ConfigFactory.parseString("sequence=" + s) }
       .map { c => Configuration(c) }
-      .map { c => getConfigSeq("teams", c) }
+      .map { c => getConfigSeq("sequence", c) }
       .getOrElse { Seq.empty }
 
-  lazy val teams: Seq[Team] = getConfigSeqFromEnv("slackoff.teams")
+  lazy val teams: Seq[Team] = getConfigSeqFromEnv("slackoff.core.teams")
     .map { o => Team(
       o.getString("id").getOrElse(""),
       o.getString("name").getOrElse(""),

@@ -19,4 +19,6 @@ case class Command(
   lazy val name: String = command.drop(1)
   lazy val args: List[String] = text.split(" ").toList
   lazy val team: Team = Api.teams.from(this.team_id)
+  lazy val user: User = User(this.user_id, Option(this.user_name))
+  lazy val channel: Channel = Channel(this.channel_id, Option(this.channel_name))
 }

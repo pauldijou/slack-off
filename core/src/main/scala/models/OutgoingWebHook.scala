@@ -22,13 +22,18 @@ case class OutgoingWebHook(
   lazy val content: String = this.text.getOrElse("")
   lazy val acceptable: Boolean = (this.user_id != "USLACKBOT") && this.text.isDefined
   lazy val team: Team = Api.teams.from(this.team_id, Option(this.team_domain))
-  lazy val command: Option[Command] = this.trigger_word.flatMap { _ match {
-    case "!" => {
-      val words = content.split(" ").drop(1) // Here, we are dropping the trigger word from the text
-      Option(Command(token, team_id, channel_id, channel_name, user_id, user_name, "/" + words.head, words.drop(1).mkString(" ")))
+  lazy val user: User = User(this.user_id, Option(this.user_name))
+  lazy val channel: Channel = Channel(this.channel_id, Option(this.channel_name))
+
+  lazy val command: Option[Command] = this.trigger_word.flatMap { tword =>
+    if (tword.startsWith("!")) { text map { t =>
+      val words = t.drop(1).trim.split(" ") // Here, we are dropping the starting bang
+      Command(token, team_id, channel_id, channel_name, user_id, user_name, "/" + words.head, words.drop(1).mkString(" "))
+    }}
+    else {
+      None
     }
-    case _ => None
-  }}
+  }
 }
 
 object OutgoingWebHook {

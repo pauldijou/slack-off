@@ -16,7 +16,7 @@ lazy val core = Project("core", file("core"))
   .settings(commonSettings: _*)
   .settings(
     name := "slackoff-core",
-    libraryDependencies ++= Seq(akka, jsonP, playP, wsP, scalaTestPlus)
+    libraryDependencies ++= Seq(akkaP, jsonP, playP, wsP, jodaP, scalaTestPlus)
   )
   .enablePlugins(SbtTwirl)
 
@@ -48,7 +48,7 @@ lazy val zik = Project("zik", file("zik"))
   .settings(commonSettings: _*)
   .settings(
     name := "slackoff-zik",
-    libraryDependencies ++= Seq(jsonP, playP, wsP)
+    libraryDependencies ++= Seq(jsonP, playP, wsP, jodaP)
   )
   .dependsOn(core)
 
@@ -56,7 +56,7 @@ lazy val server = Project("server", file("server"))
   .settings(commonSettings: _*)
   .settings(
     name := "slackoff-server",
-    libraryDependencies ++= Seq(joda, json, play, ws)
+    libraryDependencies ++= Seq(joda, json, play, ws, joda)
   )
   .enablePlugins(PlayScala)
   .enablePlugins(SbtTwirl)
